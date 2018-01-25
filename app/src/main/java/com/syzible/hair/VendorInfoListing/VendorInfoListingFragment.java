@@ -18,7 +18,7 @@ import com.syzible.hair.Common.Objects.Vendor;
 import com.syzible.hair.R;
 import com.syzible.hair.VendorInfoListing.Content.ContentFragment;
 import com.syzible.hair.VendorInfoListing.Details.DetailsFragment;
-import com.syzible.hair.VendorInfoListing.Map.MapFragment;
+import com.syzible.hair.VendorInfoListing.Map.MapSectionVendorInfoFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +72,10 @@ public class VendorInfoListingFragment extends Fragment {
         detailsFragment.setVendor(vendor);
 
         ContentFragment contentFragment = new ContentFragment();
-        MapFragment mapFragment = new MapFragment();
+        contentFragment.setVendor(vendor);
+
+        MapSectionVendorInfoFragment mapFragment = new MapSectionVendorInfoFragment();
+        mapFragment.setVendor(vendor);
 
         adapter.addFragment(detailsFragment, "Details");
         adapter.addFragment(contentFragment, "Content");

@@ -50,9 +50,8 @@ public class VendorListInteractorImpl implements VendorListInteractor {
 
         vendors.add(new Vendor("GlassByte Barbers",
                 "http://www.glassbyte.com/images/logo.png",
-                "Phibsboro, Dublin 7",
-                0,
-                0,
+                "Leeson St. Upper, Dublin 4",
+                53.329203, -6.249220,
                 new Tags("Crew Cut"),
                 new OpeningHours(),
                 new PriceList(),
@@ -60,7 +59,7 @@ public class VendorListInteractorImpl implements VendorListInteractor {
 
         vendors.add(new Vendor("Grafton Barber",
                 "https://image.flaticon.com/icons/png/512/40/40861.png",
-                "Grafton St, Dublin 2",
+                "Grafton St., Dublin 2",
                 0,
                 0,
                 new Tags("Luxury", "Trendy"),
@@ -70,7 +69,7 @@ public class VendorListInteractorImpl implements VendorListInteractor {
 
         vendors.add(new Vendor("Fades and Blades",
                 "https://upload.wikimedia.org/wikipedia/en/b/b2/Running_with_Scissors_logo.png",
-                "Dorset St, Dublin 1",
+                "Dorset St., Dublin 1",
                 0,
                 0,
                 new Tags("Quick", "Stylish"),

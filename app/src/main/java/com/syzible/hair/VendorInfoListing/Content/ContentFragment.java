@@ -3,12 +3,12 @@ package com.syzible.hair.VendorInfoListing.Content;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.squareup.picasso.Callback;
@@ -66,10 +66,9 @@ public class ContentFragment extends Fragment implements ContentView {
         private List<InstaContent> content;
 
         class ViewHolder {
-            ImageView image;
+            SquareImageView image;
             ProgressBar progressBar;
         }
-
 
         ContentAdapter(List<InstaContent> content) {
             this.content = content;
@@ -108,18 +107,21 @@ public class ContentFragment extends Fragment implements ContentView {
             }
 
             InstaContent contentItem = content.get(position);
+            Log.i(getClass().getSimpleName(), contentItem.getThumbnailUrl());
+
             Picasso.with(getContext())
                     .load(contentItem.getThumbnailUrl())
                     .fit()
                     .into(viewHolder.image, new Callback() {
                         @Override
                         public void onSuccess() {
+                            Log.i(getClass().getSimpleName(), "Picasso successful");
                             viewHolder.progressBar.setVisibility(View.GONE);
                         }
 
                         @Override
                         public void onError() {
-
+                            Log.e(getClass().getSimpleName(), "Picasso failed");
                         }
                     });
 

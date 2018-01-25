@@ -22,13 +22,13 @@ public class InstaContent {
         this.standardQualityWidth = imageData.getJSONObject("standard_resolution").getInt("width");
         this.standardQualityHeight = imageData.getJSONObject("standard_resolution").getInt("height");
 
-        this.lowQualityUrl = imageData.getJSONObject("standard_resolution").getString("url");
-        this.lowQualityWidth = imageData.getJSONObject("standard_resolution").getInt("width");
-        this.lowQualityHeight = imageData.getJSONObject("standard_resolution").getInt("height");
+        this.lowQualityUrl = imageData.getJSONObject("low_resolution").getString("url");
+        this.lowQualityWidth = imageData.getJSONObject("low_resolution").getInt("width");
+        this.lowQualityHeight = imageData.getJSONObject("low_resolution").getInt("height");
 
-        this.thumbnailUrl = imageData.getJSONObject("standard_resolution").getString("url");
-        this.thumnailWidth = imageData.getJSONObject("standard_resolution").getInt("width");
-        this.thumbnailHeight = imageData.getJSONObject("standard_resolution").getInt("height");
+        this.thumbnailUrl = imageData.getJSONObject("thumbnail").getString("url");
+        this.thumnailWidth = imageData.getJSONObject("thumbnail").getInt("width");
+        this.thumbnailHeight = imageData.getJSONObject("thumbnail").getInt("height");
 
         this.tags = new Tags(o.getJSONArray("tags"));
 

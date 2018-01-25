@@ -1,5 +1,7 @@
 package com.syzible.hair.Common.Objects;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,12 +47,8 @@ public class Vendor {
         return logoUrl;
     }
 
-    public double getLat() {
-        return lat;
-    }
-
-    public double getLng() {
-        return lng;
+    public LatLng getCoords() {
+        return new LatLng(lat, lng);
     }
 
     public Tags getTags() {
