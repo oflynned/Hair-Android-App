@@ -6,18 +6,28 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 import com.syzible.hair.Common.Objects.Vendor;
 import com.syzible.hair.R;
 
+import java.util.List;
+
 public class ContentFragment extends Fragment implements ContentView {
+    private View view;
     private ContentPresenter contentPresenter;
+
     private Vendor vendor;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_vendor_content, container, false);
+        view = inflater.inflate(R.layout.fragment_vendor_content, container, false);
         return view;
     }
 
@@ -27,7 +37,7 @@ public class ContentFragment extends Fragment implements ContentView {
             contentPresenter = new ContentPresenterImpl();
 
         contentPresenter.attach(this);
-        //contentPresenter.start(vendor);
+        contentPresenter.start();
         super.onResume();
     }
 
@@ -35,5 +45,85 @@ public class ContentFragment extends Fragment implements ContentView {
     public void onPause() {
         contentPresenter.detach();
         super.onPause();
+    }
+
+    @Override
+    public void setAdapter(List<InstaContent> content) {
+        GridView gridView = view.findViewById(R.id.instagram_content_grid);
+        gridView.setAdapter(new ContentAdapter(content));
+    }
+
+    @Override
+    public Vendor getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(Vendor vendor) {
+        this.vendor = vendor;
+    }
+
+    class ContentAdapter extends BaseAdapter {
+        private List<InstaContent> content;
+
+        class ViewHolder {
+            ImageView image;
+            ProgressBar progressBar;
+        }
+
+
+        ContentAdapter(List<InstaContent> content) {
+            this.content = content;
+        }
+
+        @Override
+        public int getCount() {
+            return content.size();
+        }
+
+        @Override
+        public InstaContent getItem(int position) {
+            return content.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return content.get(position).getCreationTime();
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View imageViewHolder = convertView;
+            final ViewHolder viewHolder;
+
+            if (convertView == null) {
+                LayoutInflater inflater = getLayoutInflater();
+                imageViewHolder = inflater.inflate(R.layout.instagram_content_tile, parent, false);
+
+                viewHolder = new ViewHolder();
+                viewHolder.image = imageViewHolder.findViewById(R.id.instagram_content_tile_image);
+                viewHolder.progressBar = imageViewHolder.findViewById(R.id.placeholder_loading_indicator);
+                imageViewHolder.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+            InstaContent contentItem = content.get(position);
+            Picasso.with(getContext())
+                    .load(contentItem.getThumbnailUrl())
+                    .fit()
+                    .into(viewHolder.image, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            viewHolder.progressBar.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
+
+            return imageViewHolder;
+        }
     }
 }

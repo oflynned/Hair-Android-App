@@ -31,10 +31,6 @@ public class OpeningTime {
 
     public boolean isOpenNow() throws OpeningTimeNotFoundException {
         Calendar currentTime = getCurrentTime();
-        System.out.println(currentTime.getTime().getDay() + " " + currentTime.getTime().getHours() + " " + currentTime.getTime().getMinutes());
-        System.out.println(getOpeningTime().getTime().getDay() + " " + getOpeningTime().getTime().getHours() + " " + getOpeningTime().getTime().getMinutes());
-        System.out.println(getClosingTime().getTime().getDay() + " " + getClosingTime().getTime().getHours() + " " + getClosingTime().getTime().getMinutes());
-
         return currentTime.getTime().getDay() == getOpeningTime().getTime().getDay() &&
                 currentTime.after(getOpeningTime()) &&
                 currentTime.before(getClosingTime());
