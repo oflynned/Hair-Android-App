@@ -67,9 +67,16 @@ public class VendorInfoListingFragment extends Fragment {
 
     private void setupViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getFragmentManager());
-        adapter.addFragment(new DetailsFragment(), "Details");
-        adapter.addFragment(new ContentFragment(), "Content");
-        adapter.addFragment(new MapFragment(), "Map");
+
+        DetailsFragment detailsFragment = new DetailsFragment();
+        detailsFragment.setVendor(vendor);
+
+        ContentFragment contentFragment = new ContentFragment();
+        MapFragment mapFragment = new MapFragment();
+
+        adapter.addFragment(detailsFragment, "Details");
+        adapter.addFragment(contentFragment, "Content");
+        adapter.addFragment(mapFragment, "Map");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

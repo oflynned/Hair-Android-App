@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -36,5 +37,11 @@ public class OpeningHours {
 
     public List<OpeningTime> getOpeningTimes() {
         return openingTimes;
+    }
+
+    public OpeningTime getToday() {
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        return openingTimes.get(day - 2);
     }
 }

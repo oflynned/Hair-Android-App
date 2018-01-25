@@ -3,11 +3,11 @@ package com.syzible.hair.Common;
 import android.content.Context;
 
 public interface Mvp {
-    interface View {
+    interface IView {
         Context getContext();
     }
 
-    interface Presenter<View>  {
+    interface IPresenter<View>  {
         void attach(View view);
 
         void detach();

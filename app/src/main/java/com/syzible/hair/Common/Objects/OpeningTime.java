@@ -7,8 +7,8 @@ public class OpeningTime {
 
     public OpeningTime(String day, String openingTime, String closingTime) throws OpeningTimeNotFoundException {
         this.day = day;
-        this.openingTime= openingTime;
-        this.closingTime= closingTime;
+        this.openingTime = openingTime;
+        this.closingTime = closingTime;
     }
 
     public Calendar getOpeningTime() throws OpeningTimeNotFoundException {
@@ -26,15 +26,18 @@ public class OpeningTime {
     }
 
     public String getFormattedOpeningTime() {
-        return day.substring(0, 1).toUpperCase() + day.substring(1).toLowerCase() + ": " +
-                openingTime + " - " + closingTime;
+        return openingTime + " - " + closingTime;
     }
 
     public boolean isOpenNow() throws OpeningTimeNotFoundException {
         Calendar currentTime = getCurrentTime();
+        System.out.println(currentTime.getTime().getDay() + " " + currentTime.getTime().getHours() + " " + currentTime.getTime().getMinutes());
+        System.out.println(getOpeningTime().getTime().getDay() + " " + getOpeningTime().getTime().getHours() + " " + getOpeningTime().getTime().getMinutes());
+        System.out.println(getClosingTime().getTime().getDay() + " " + getClosingTime().getTime().getHours() + " " + getClosingTime().getTime().getMinutes());
+
         return currentTime.getTime().getDay() == getOpeningTime().getTime().getDay() &&
-                currentTime.after(openingTime) &&
-                currentTime.before(closingTime);
+                currentTime.after(getOpeningTime()) &&
+                currentTime.before(getClosingTime());
     }
 
     private Calendar getTimeAsDate(String day, String time) throws OpeningTimeNotFoundException {
@@ -43,8 +46,9 @@ public class OpeningTime {
         int minutes = Integer.parseInt(separatedTime[1]);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR, hour);
         calendar.set(Calendar.MINUTE, minutes);
+        calendar.set(Calendar.HOUR, hour);
+        calendar.set(Calendar.AM_PM, (hour >= 0 || hour < 12) ? Calendar.AM : Calendar.PM);
         calendar.set(Calendar.DAY_OF_WEEK, getDayOfWeek(day));
 
         return calendar;
