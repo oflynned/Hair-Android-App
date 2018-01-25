@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.syzible.hair.Common.MainActivity;
 import com.syzible.hair.Common.Objects.Vendor;
 import com.syzible.hair.R;
 import com.syzible.hair.VendorInfoListing.Content.ContentFragment;
@@ -23,29 +24,26 @@ import com.syzible.hair.VendorInfoListing.Map.MapSectionVendorInfoFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VendorInfoListingFragment extends Fragment {
+public class VendorInfoListingFragment extends Fragment implements VendorInfoListingView {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private Vendor vendor;
 
-    private ImageView vendorLogo;
-    private TextView vendorTitle, vendorTags, vendorAddress;
+    private VendorInfoListingPresenter presenter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vendor_listing, container, false);
 
-        vendorTitle = view.findViewById(R.id.vendor_name);
-        vendorTags = view.findViewById(R.id.vendor_tags);
-        vendorAddress = view.findViewById(R.id.vendor_address);
-        vendorLogo = view.findViewById(R.id.vendor_logo);
+        TextView vendorTitle = view.findViewById(R.id.vendor_name);
+        TextView vendorTags = view.findViewById(R.id.vendor_tags);
+        TextView vendorAddress = view.findViewById(R.id.vendor_address);
+        ImageView vendorLogo = view.findViewById(R.id.vendor_logo);
 
         tabLayout = view.findViewById(R.id.vendor_info_tabs);
         viewPager = view.findViewById(R.id.vendor_info_holder);
-
-        setupViewPager();
 
         Picasso.with(getActivity()).load(vendor.getLogoUrl()).into(vendorLogo);
         vendorTitle.setText(vendor.getVendorName());
@@ -57,11 +55,19 @@ public class VendorInfoListingFragment extends Fragment {
 
     @Override
     public void onResume() {
+        if (presenter == null)
+            presenter = new VendorInfoListingPresenterImpl();
+
+        presenter.attach(this);
+
+        setupViewPager();
         super.onResume();
     }
 
     @Override
     public void onPause() {
+        presenter.detach();
+        MainActivity.removeFragment(getFragmentManager(), this);
         super.onPause();
     }
 

@@ -18,8 +18,6 @@ import com.syzible.hair.VendorMap.VendorMapFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Fragment vendorListFragment, vendorMapFragment, interestedPartiesFragment;
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -27,13 +25,13 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_vendors:
-                    setFragment(getFragmentManager(), vendorListFragment);
+                    setFragment(getFragmentManager(), new VendorListFragment());
                     return true;
                 case R.id.navigation_map:
-                    setFragment(getFragmentManager(), vendorMapFragment);
+                    setFragment(getFragmentManager(), new VendorMapFragment());
                     return true;
                 case R.id.navigation_interested_parties:
-                    setFragment(getFragmentManager(), interestedPartiesFragment);
+                    setFragment(getFragmentManager(), new InterestedPartiesFragment());
                     return true;
             }
             return false;
@@ -46,14 +44,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        vendorListFragment = new VendorListFragment();
-        vendorMapFragment = new VendorMapFragment();
-        interestedPartiesFragment = new InterestedPartiesFragment();
-
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        setFragment(getFragmentManager(), vendorListFragment);
+        setFragment(getFragmentManager(), new VendorListFragment());
     }
 
     @Override
@@ -111,6 +105,11 @@ public class MainActivity extends AppCompatActivity {
     public static void removeTopFragment(FragmentManager fragmentManager) {
         if (fragmentManager != null)
             fragmentManager.popBackStack();
+    }
+
+    public static void removeFragment(FragmentManager fragmentManager, Fragment fragment) {
+        if (fragmentManager != null)
+            fragmentManager.beginTransaction().remove(fragment).commit();
     }
 
     public static void clearBackstack(FragmentManager fragmentManager) {

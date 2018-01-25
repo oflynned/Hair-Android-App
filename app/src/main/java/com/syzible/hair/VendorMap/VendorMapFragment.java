@@ -21,7 +21,6 @@ import com.syzible.hair.VendorMap.VendorMapView.MapView;
 public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCallback {
 
     private MapPresenter mapPresenter;
-    private GoogleMap googleMap;
 
     public static final LatLng ATHLONE = new LatLng(53.4232575, -7.9402598);
     public static final float INITIAL_LOCATION_ZOOM = 6.0f;
@@ -72,7 +71,6 @@ public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCa
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        System.out.println("here?");
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ATHLONE, INITIAL_LOCATION_ZOOM));
     }
 }

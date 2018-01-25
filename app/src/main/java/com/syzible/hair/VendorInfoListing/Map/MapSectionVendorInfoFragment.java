@@ -12,6 +12,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.syzible.hair.Common.MainActivity;
 import com.syzible.hair.Common.Objects.Vendor;
 import com.syzible.hair.R;
 
@@ -42,6 +43,7 @@ public class MapSectionVendorInfoFragment extends Fragment implements MapSection
     @Override
     public void onPause() {
         presenter.detach();
+        MainActivity.removeFragment(getFragmentManager(), this);
         super.onPause();
     }
 
