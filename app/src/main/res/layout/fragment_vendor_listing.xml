@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/windowBackground">
+
+    <!-- vendor header use case -->
+    <RelativeLayout
+        android:id="@+id/vendor_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:elevation="2dp"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/vendor_logo"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/vendor_logo">
+
+            <TextView
+                android:id="@+id/vendor_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vendor Name"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/vendor_tags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vendor_name"
+                android:text="Tag 1, Tag 2, Tag 3" />
+
+            <TextView
+                android:id="@+id/vendor_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vendor_tags"
+                android:text="Phibsborough, Dublin" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!-- tab sections use case -->
+    <android.support.design.widget.TabLayout
+        android:id="@+id/vendor_info_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/vendor_header"
+        android:layout_below="@+id/vendor_header"
+        android:background="?android:attr/windowBackground"
+        android:elevation="2dp"
+        app:tabGravity="fill"
+        app:tabMode="fixed">
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Details" />
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Content" />
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Map" />
+    </android.support.design.widget.TabLayout>
+
+    <!-- tab fragment content use case -->
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vendor_info_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignStart="@+id/vendor_info_tabs"
+        android:layout_below="@+id/vendor_info_tabs"
+        app:layout_scrollFlags="snap" />
+</RelativeLayout>
