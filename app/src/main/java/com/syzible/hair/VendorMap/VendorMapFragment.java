@@ -1,8 +1,11 @@
 package com.syzible.hair.VendorMap;
 
+import android.Manifest;
 import android.app.Fragment;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +24,8 @@ public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCa
 
     private MapPresenter mapPresenter;
 
-    public static final LatLng ATHLONE = new LatLng(53.4232575, -7.9402598);
-    public static final float INITIAL_LOCATION_ZOOM = 6.0f;
+    public static final LatLng DUBLIN = new LatLng(53.347239, -6.259098);
+    public static final float INITIAL_LOCATION_ZOOM = 12.0f;
 
     @Nullable
     @Override
@@ -65,6 +68,12 @@ public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCa
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ATHLONE, INITIAL_LOCATION_ZOOM));
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        googleMap.setMyLocationEnabled(true);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DUBLIN, INITIAL_LOCATION_ZOOM));
     }
 }

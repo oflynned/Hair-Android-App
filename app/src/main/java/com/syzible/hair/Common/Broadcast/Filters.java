@@ -4,7 +4,7 @@ public enum Filters {
     location_update {
         @Override
         public String toString() {
-            return "com.syzible.hair.Common.Broadcast.location_update";
+            return "com.syzible.hair.location_update";
         }
     }
 }

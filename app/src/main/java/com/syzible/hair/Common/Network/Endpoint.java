@@ -5,6 +5,8 @@ import android.os.Build;
 import com.syzible.hair.Common.Objects.PortfolioContent;
 import com.syzible.hair.Common.Objects.Vendor;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -34,7 +36,7 @@ public class Endpoint {
         return API_URL + endpoint;
     }
 
-    interface EndpointRetrofit {
+    public interface EndpointRetrofit {
         @GET("vendor/")
         Call<List<Vendor>> getVendors();
 
@@ -43,6 +45,13 @@ public class Endpoint {
 
         @GET("vendor/filter")
         Call<List<Vendor>> getFilteredVendors(@Query("lng") double lng, @Query("lat") double lat, @Query("radius") int radius);
+
+        @GET("vendor/distance")
+        Call<JSONObject> getDistanceToVendor(@Query("user_lat") double userLat,
+                                             @Query("user_lng") double userLng,
+                                             @Query("vendor_lat") double vendorLat,
+                                             @Query("vendor_lng") double vendorLng,
+                                             @Query("units") String units);
     }
 }
 

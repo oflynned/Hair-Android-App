@@ -4,8 +4,11 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,10 +19,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.syzible.hair.Common.Broadcast.Filters;
+import com.syzible.hair.Common.Location.LocationService;
 import com.syzible.hair.InterestedParties.InterestedPartiesFragment;
 import com.syzible.hair.R;
 import com.syzible.hair.VendorList.VendorListFragment;
 import com.syzible.hair.VendorMap.VendorMapFragment;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,6 +50,15 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private BroadcastReceiver onLocationUpdate = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            assert onLocationUpdate != null;
+            if (Objects.equals(intent.getAction(), Filters.location_update.toString())) {
+
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +69,19 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         setFragment(getFragmentManager(), new VendorListFragment());
+    }
+
+    @Override
+    protected void onResume() {
+        checkPermission();
+        registerReceiver(onLocationUpdate, new IntentFilter(Filters.location_update.toString()));
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(onLocationUpdate);
+        super.onPause();
     }
 
     @Override
