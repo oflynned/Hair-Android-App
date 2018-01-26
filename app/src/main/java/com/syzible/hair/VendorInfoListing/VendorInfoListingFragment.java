@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.syzible.hair.Common.MainActivity;
 import com.syzible.hair.Common.Objects.Vendor;
 import com.syzible.hair.R;
 import com.syzible.hair.VendorInfoListing.Content.ContentFragment;
@@ -26,11 +25,11 @@ import java.util.List;
 
 public class VendorInfoListingFragment extends Fragment implements VendorInfoListingView {
 
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
     private Vendor vendor;
-
     private VendorInfoListingPresenter presenter;
+
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
 
     @Nullable
     @Override
@@ -42,8 +41,8 @@ public class VendorInfoListingFragment extends Fragment implements VendorInfoLis
         TextView vendorAddress = view.findViewById(R.id.vendor_address);
         ImageView vendorLogo = view.findViewById(R.id.vendor_logo);
 
-        tabLayout = view.findViewById(R.id.vendor_info_tabs);
         viewPager = view.findViewById(R.id.vendor_info_holder);
+        tabLayout = view.findViewById(R.id.vendor_info_tabs);
 
         Picasso.with(getActivity()).load(vendor.getLogoUrl()).into(vendorLogo);
         vendorTitle.setText(vendor.getVendorName());
@@ -60,7 +59,12 @@ public class VendorInfoListingFragment extends Fragment implements VendorInfoLis
 
         presenter.attach(this);
 
-        setupViewPager();
+        if (viewPager != null)
+            setupViewPager(viewPager);
+
+        tabLayout.setupWithViewPager(viewPager);
+        viewPager.getAdapter().notifyDataSetChanged();
+
         super.onResume();
     }
 
@@ -70,8 +74,8 @@ public class VendorInfoListingFragment extends Fragment implements VendorInfoLis
         super.onPause();
     }
 
-    private void setupViewPager() {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getFragmentManager());
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
 
         DetailsFragment detailsFragment = new DetailsFragment();
         detailsFragment.setVendor(vendor);
@@ -87,7 +91,6 @@ public class VendorInfoListingFragment extends Fragment implements VendorInfoLis
         adapter.addFragment(mapFragment, "Map");
 
         viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
     }
 
     public void setVendor(Vendor vendor) {

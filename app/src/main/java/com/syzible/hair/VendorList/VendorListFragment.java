@@ -90,7 +90,7 @@ public class VendorListFragment extends Fragment implements VendorListView {
             }
         }
 
-        public VendorListAdapter(List<Vendor> vendors) {
+        VendorListAdapter(List<Vendor> vendors) {
             this.vendors = vendors;
         }
 

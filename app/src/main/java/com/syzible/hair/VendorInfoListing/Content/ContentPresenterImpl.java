@@ -36,12 +36,13 @@ public class ContentPresenterImpl implements ContentPresenter {
 
             @Override
             public void onSuccess(JSONArray a) throws JSONException, OpeningTimeNotFoundException {
-                assert contentView != null;
                 List<InstaContent> content = new ArrayList<>();
                 for (int i = 0; i < a.length(); i++)
                     content.add(new InstaContent(a.getJSONObject(i)));
 
-                contentView.setAdapter(content);
+                if (contentView != null) {
+                    contentView.setAdapter(content);
+                }
             }
         });
     }
