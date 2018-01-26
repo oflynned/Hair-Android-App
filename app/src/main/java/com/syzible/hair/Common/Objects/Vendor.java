@@ -6,7 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Vendor {
-    private String vendorName, logoUrl, address;
+    private String vendorName, logoUrl, address, igUsername;
     private double lat, lng;
 
     private Tags tags;
@@ -22,9 +22,13 @@ public class Vendor {
 
         JSONObject meta = o.getJSONObject("meta");
         this.logoUrl = meta.getString("logo");
-        this.lat = meta.getJSONObject("location").getDouble("lat");
-        this.lng = meta.getJSONObject("location").getDouble("lng");
+        this.igUsername = meta.getString("ig_username");
         this.tags = new Tags(meta.getJSONArray("tags"));
+
+        JSONObject location = meta.getJSONObject("location");
+        this.address = location.getString("address");
+        this.lat = location.getDouble("lat");
+        this.lng = location.getDouble("lng");
     }
 
     public Vendor(String vendorName, String logoUrl, String address, double lat, double lng, Tags tags, OpeningHours openingHours, PriceList priceList, boolean isPriority) {

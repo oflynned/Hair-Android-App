@@ -67,7 +67,7 @@ public class VendorListFragment extends Fragment implements VendorListView {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerDecorator(getActivity(), 16));
+        recyclerView.addItemDecoration(new DividerDecorator(getContext(), 16));
         recyclerView.setAdapter(adapter);
     }
 
