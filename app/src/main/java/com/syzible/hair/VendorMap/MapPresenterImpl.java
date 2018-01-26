@@ -18,7 +18,6 @@ import java.util.List;
 
 public class MapPresenterImpl implements MapPresenter {
     private MapView mapView;
-    private Context context;
 
     private JsonInteractor.JsonArrayInteractor interactor;
     private List<Vendor> vendors;
@@ -26,14 +25,12 @@ public class MapPresenterImpl implements MapPresenter {
     @Override
     public void attach(MapView mapView) {
         this.mapView = mapView;
-        this.context = mapView.getContext();
         this.interactor = new JsonArrayInteractorImpl();
     }
 
     @Override
     public void detach() {
         this.mapView = null;
-        this.context = null;
         this.interactor = null;
     }
 

@@ -15,6 +15,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.syzible.hair.Common.Objects.Vendor;
 import com.syzible.hair.R;
 
@@ -22,6 +23,7 @@ import java.util.List;
 
 public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCallback {
 
+    private GoogleMap googleMap;
     private MapPresenter mapPresenter;
 
     public static final LatLng DUBLIN = new LatLng(53.347239, -6.259098);
@@ -42,6 +44,7 @@ public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCa
             mapPresenter = new MapPresenterImpl();
 
         mapPresenter.attach(this);
+        mapPresenter.getPins();
         super.onResume();
     }
 
@@ -53,7 +56,12 @@ public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCa
 
     @Override
     public void drawPins(List<Vendor> vendors) {
-
+        googleMap.clear();
+        for (Vendor vendor : vendors) {
+            googleMap.addMarker(new MarkerOptions()
+                    .title(vendor.getVendorName())
+                    .position(vendor.getCoords()));
+        }
     }
 
     @Override
@@ -75,5 +83,6 @@ public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCa
 
         googleMap.setMyLocationEnabled(true);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DUBLIN, INITIAL_LOCATION_ZOOM));
+        this.googleMap = googleMap;
     }
 }
