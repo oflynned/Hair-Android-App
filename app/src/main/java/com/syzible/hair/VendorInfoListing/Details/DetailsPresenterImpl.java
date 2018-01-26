@@ -23,7 +23,8 @@ public class DetailsPresenterImpl implements DetailsPresenter {
         if (detailsView != null) {
             try {
                 detailsView.setOpeningHours(vendor.getOpeningHours());
-                detailsView.setNowOpen(vendor);
+                detailsView.setNowOpen(vendor.getOpeningHours().getToday().isOpenNow());
+                detailsView.setPrices(vendor.getPriceList());
             } catch (OpeningTimeNotFoundException e) {
                 e.printStackTrace();
             }

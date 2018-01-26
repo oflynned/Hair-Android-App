@@ -1,4 +1,4 @@
-package com.syzible.hair.VendorList.UI;
+package com.syzible.hair.VendorList;
 
 import android.content.Context;
 import android.content.res.Resources;

@@ -17,7 +17,6 @@ import com.syzible.hair.Common.MainActivity;
 import com.syzible.hair.Common.Objects.Vendor;
 import com.syzible.hair.R;
 import com.syzible.hair.VendorInfoListing.VendorInfoListingFragment;
-import com.syzible.hair.VendorList.UI.DividerDecorator;
 
 import java.util.List;
 

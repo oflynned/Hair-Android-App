@@ -87,8 +87,8 @@ public class VendorInfoListingFragment extends Fragment implements VendorInfoLis
         mapFragment.setVendor(vendor);
 
         adapter.addFragment(detailsFragment, "Details");
-        adapter.addFragment(contentFragment, "Content");
-        adapter.addFragment(mapFragment, "Map");
+        adapter.addFragment(contentFragment, "Instagram");
+        adapter.addFragment(mapFragment, "Location");
 
         viewPager.setAdapter(adapter);
     }

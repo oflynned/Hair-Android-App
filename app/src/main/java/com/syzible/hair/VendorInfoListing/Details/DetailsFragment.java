@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.syzible.hair.Common.Objects.OpeningHours;
 import com.syzible.hair.Common.Objects.OpeningTimeNotFoundException;
+import com.syzible.hair.Common.Objects.Price;
+import com.syzible.hair.Common.Objects.PriceList;
 import com.syzible.hair.Common.Objects.Vendor;
 import com.syzible.hair.R;
 
@@ -21,6 +23,7 @@ public class DetailsFragment extends Fragment implements DetailsView {
 
     private TextView monHours, tuesHours, wedHours, thursHours, friHours, satHours, sunHours;
     private TextView openStatus;
+    private TextView prices;
 
     @Nullable
     @Override
@@ -36,6 +39,8 @@ public class DetailsFragment extends Fragment implements DetailsView {
         sunHours = view.findViewById(R.id.sunday_hours);
 
         openStatus = view.findViewById(R.id.open_now_status);
+
+        prices = view.findViewById(R.id.haircut_pricing);
 
         return view;
     }
@@ -68,14 +73,26 @@ public class DetailsFragment extends Fragment implements DetailsView {
     }
 
     @Override
-    public void setNowOpen(Vendor vendor) throws OpeningTimeNotFoundException {
-        if (vendor.getOpeningHours().getToday().isOpenNow()) {
+    public void setNowOpen(boolean isOpenNow) throws OpeningTimeNotFoundException {
+        if (isOpenNow) {
             openStatus.setTextColor(ContextCompat.getColor(getContext(), R.color.teal_500));
             openStatus.setText("Open now!");
         } else {
             openStatus.setTextColor(ContextCompat.getColor(getContext(), R.color.red_500));
             openStatus.setText("Closed now!");
         }
+    }
+
+    @Override
+    public void setPrices(PriceList prices) {
+        StringBuilder builder = new StringBuilder();
+        for (Price price : prices.getPrices()) {
+            builder.append(price.getStyle())
+                    .append(":\t\t")
+                    .append(price.getFormattedCost())
+                    .append("\n");
+        }
+        this.prices.setText(builder.toString());
     }
 
     @Override

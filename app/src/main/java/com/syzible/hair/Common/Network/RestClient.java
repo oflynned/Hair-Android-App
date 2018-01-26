@@ -11,7 +11,6 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
-import cz.msebera.android.httpclient.client.params.ClientPNames;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class RestClient {
