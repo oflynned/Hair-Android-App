@@ -66,11 +66,6 @@ public class ContentFragment extends Fragment implements ContentView {
     class ContentAdapter extends BaseAdapter {
         private List<InstaContent> content;
 
-        class ViewHolder {
-            SquareImageView image;
-            ProgressBar progressBar;
-        }
-
         ContentAdapter(List<InstaContent> content) {
             this.content = content;
         }

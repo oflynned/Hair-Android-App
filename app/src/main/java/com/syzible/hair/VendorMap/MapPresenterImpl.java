@@ -1,14 +1,17 @@
-package com.syzible.hair.VendorMap.VendorMapView;
+package com.syzible.hair.VendorMap;
 
 import android.content.Context;
 import android.util.Log;
 
+import com.syzible.hair.Common.Interactors.JsonArrayInteractorImpl;
+import com.syzible.hair.Common.Interactors.JsonInteractor;
 import com.syzible.hair.Common.Network.Endpoint;
 import com.syzible.hair.Common.Objects.OpeningTimeNotFoundException;
 import com.syzible.hair.Common.Objects.Vendor;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +20,14 @@ public class MapPresenterImpl implements MapPresenter {
     private MapView mapView;
     private Context context;
 
-    private MapDataInteractor interactor;
+    private JsonInteractor.JsonArrayInteractor interactor;
     private List<Vendor> vendors;
 
     @Override
     public void attach(MapView mapView) {
         this.mapView = mapView;
         this.context = mapView.getContext();
-        this.interactor = new MapDataInteractorImpl();
+        this.interactor = new JsonArrayInteractorImpl();
     }
 
     @Override
@@ -38,35 +41,30 @@ public class MapPresenterImpl implements MapPresenter {
     public void getPins() {
         assert interactor != null;
 
-        interactor.fetch(Endpoint.GET_ALL_VENDORS, new MapDataInteractor.OnFetchFinished() {
+        interactor.fetch(Endpoint.GET_ALL_VENDORS, new JsonInteractor.OnFetchFinished() {
             @Override
             public void onError(int statusCode, String message) {
                 Log.d(getClass().getSimpleName(), statusCode + ": " + message);
             }
 
             @Override
-            public void onSuccess(JSONArray a) throws JSONException, OpeningTimeNotFoundException {
+            public void onSuccess(JSONArray a) throws JSONException {
                 vendors = new ArrayList<>();
 
                 for (int i = 0; i < a.length(); i++)
-                    vendors.add(new Vendor(a.getJSONObject(i)));
+                    try {
+                        vendors.add(new Vendor(a.getJSONObject(i)));
+                    } catch (OpeningTimeNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    mapView.drawPins(vendors);
+            }
+
+            @Override
+            public void onSuccess(JSONObject o) {
+
             }
         });
-    }
-
-    public List<Vendor> getVendors() {
-        return vendors;
-    }
-
-    public MapView getMapView() {
-        return mapView;
-    }
-
-    public Context getContext() {
-        return context;
-    }
-
-    public MapDataInteractor getInteractor() {
-        return interactor;
     }
 }

@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
+import cz.msebera.android.httpclient.client.params.ClientPNames;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class RestClient {
@@ -23,7 +24,8 @@ public class RestClient {
 
     public static void post(Context context, String url, JSONObject data, AsyncHttpResponseHandler responseHandler) {
         try {
-            getClient().post(context, Endpoint.getApiURL(url), new StringEntity(data.toString()), "application/json", responseHandler);
+            getClient().post(context, Endpoint.getApiURL(url),
+                    new StringEntity(data.toString()), "application/json", responseHandler);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -31,7 +33,8 @@ public class RestClient {
 
     public static void put(Context context, String url, JSONObject data, AsyncHttpResponseHandler responseHandler) {
         try {
-            getClient().put(context, Endpoint.getApiURL(url), new StringEntity(data.toString()), "application/json", responseHandler);
+            getClient().put(context, Endpoint.getApiURL(url),
+                    new StringEntity(data.toString()), "application/json", responseHandler);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -39,13 +42,17 @@ public class RestClient {
 
     public static void delete(Context context, String url, JSONObject data, AsyncHttpResponseHandler responseHandler) {
         try {
-            getClient().delete(context, Endpoint.getApiURL(url), new StringEntity(data.toString()), "application/json", responseHandler);
+            getClient().delete(context, Endpoint.getApiURL(url),
+                    new StringEntity(data.toString()), "application/json", responseHandler);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
 
     private static AsyncHttpClient getClient() {
+        syncHttpClient.setEnableRedirects(true, true, true);
+        asyncHttpClient.setEnableRedirects(true, true, true);
+
         if (Looper.myLooper() == null)
             return syncHttpClient;
         return asyncHttpClient;

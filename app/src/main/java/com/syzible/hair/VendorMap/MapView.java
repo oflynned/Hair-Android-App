@@ -1,12 +1,12 @@
-package com.syzible.hair.VendorMap.VendorMapView;
+package com.syzible.hair.VendorMap;
 
 import com.syzible.hair.Common.Mvp;
 import com.syzible.hair.Common.Objects.Vendor;
 
-public interface MapView extends Mvp.IView {
-    void loadMap();
+import java.util.List;
 
-    void drawPins();
+public interface MapView extends Mvp.IView {
+    void drawPins(List<Vendor> vendors);
 
     void setVendorSelected(Vendor vendor);
 

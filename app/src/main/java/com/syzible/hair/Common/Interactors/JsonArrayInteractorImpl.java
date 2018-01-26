@@ -1,40 +1,30 @@
-package com.syzible.hair.VendorInfoListing.Content;
+package com.syzible.hair.Common.Interactors;
 
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
 import com.syzible.hair.Common.Network.RestClient;
-import com.syzible.hair.Common.Objects.OpeningHours;
-import com.syzible.hair.Common.Objects.OpeningTimeNotFoundException;
-import com.syzible.hair.Common.Objects.PriceList;
-import com.syzible.hair.Common.Objects.Tags;
-import com.syzible.hair.Common.Objects.Vendor;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
-public class ContentInteractorImpl implements ContentInteractor {
-
+public class JsonArrayInteractorImpl implements JsonInteractor.JsonArrayInteractor{
     @Override
-    public void fetch(String endpoint, final OnFetchFinished onFetchFinished) {
+    public void fetch(String endpoint, final JsonInteractor.OnFetchFinished callback) {
         RestClient.get(endpoint, new BaseJsonHttpResponseHandler<JSONArray>() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String rawJsonResponse, JSONArray response) {
                 try {
-                    onFetchFinished.onSuccess(response);
+                    callback.onSuccess(response);
                 } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (OpeningTimeNotFoundException e) {
                     e.printStackTrace();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, String rawJsonData, JSONArray errorResponse) {
-                onFetchFinished.onError(statusCode, rawJsonData);
+                callback.onError(statusCode, rawJsonData);
             }
 
             @Override

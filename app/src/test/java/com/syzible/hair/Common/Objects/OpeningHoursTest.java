@@ -1,7 +1,7 @@
 package com.syzible.hair.Common.Objects;
 
-import com.syzible.hair.VendorMap.VendorMapView.MapDataInteractor;
-import com.syzible.hair.VendorMap.VendorMapView.MapDataInteractorImpl;
+import com.syzible.hair.Common.Interactors.DataInteractor;
+import com.syzible.hair.Common.Interactors.DataInteractorImpl;
 import com.syzible.hair.Common.Network.Endpoint;
 
 import org.json.JSONArray;
@@ -12,7 +12,7 @@ public class OpeningHoursTest {
 
     @Test
     public void test_vendor_hours_correctly_parsed() throws JSONException {
-        MapDataInteractor.OnFetchFinished onFetchFinished = new MapDataInteractor.OnFetchFinished() {
+        DataInteractor.OnFetchFinished onFetchFinished = new DataInteractor.OnFetchFinished() {
             @Override
             public void onError(int statusCode, String message) {
 
@@ -25,7 +25,7 @@ public class OpeningHoursTest {
 
         };
 
-        MapDataInteractor interactor = new MapDataInteractorImpl();
+        DataInteractor interactor = new DataInteractorImpl();
         interactor.fetch(Endpoint.GET_ALL_VENDORS, onFetchFinished);
     }
 }

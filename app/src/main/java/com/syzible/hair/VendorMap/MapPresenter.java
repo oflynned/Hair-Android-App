@@ -1,4 +1,4 @@
-package com.syzible.hair.VendorMap.VendorMapView;
+package com.syzible.hair.VendorMap;
 
 import com.syzible.hair.Common.Mvp;
 

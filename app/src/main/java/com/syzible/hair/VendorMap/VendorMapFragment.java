@@ -14,9 +14,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.syzible.hair.Common.Objects.Vendor;
 import com.syzible.hair.R;
-import com.syzible.hair.VendorMap.VendorMapView.MapPresenter;
-import com.syzible.hair.VendorMap.VendorMapView.MapPresenterImpl;
-import com.syzible.hair.VendorMap.VendorMapView.MapView;
+
+import java.util.List;
 
 public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCallback {
 
@@ -50,12 +49,7 @@ public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCa
     }
 
     @Override
-    public void loadMap() {
-
-    }
-
-    @Override
-    public void drawPins() {
+    public void drawPins(List<Vendor> vendors) {
 
     }
 
