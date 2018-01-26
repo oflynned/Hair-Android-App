@@ -12,7 +12,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.syzible.hair.Common.MainActivity;
 import com.syzible.hair.Common.Objects.Vendor;
 import com.syzible.hair.R;
 
@@ -25,18 +24,19 @@ public class MapSectionVendorInfoFragment extends Fragment implements MapSection
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_vendor_map, container, false);
-        MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        return view;
+        return inflater.inflate(R.layout.fragment_vendor_map, container, false);
     }
 
     @Override
     public void onResume() {
+        MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
         if (presenter == null)
             presenter = new MapSectionVendorInfoPresenterImpl();
 
         presenter.attach(this);
+
         super.onResume();
     }
 
@@ -48,6 +48,7 @@ public class MapSectionVendorInfoFragment extends Fragment implements MapSection
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        googleMap.clear();
         googleMap.addMarker(
                 new MarkerOptions()
                         .position(vendor.getCoords())

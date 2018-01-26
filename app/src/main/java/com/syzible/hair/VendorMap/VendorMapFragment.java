@@ -39,7 +39,7 @@ public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCa
     private MapPresenter mapPresenter;
 
     public static final LatLng DUBLIN = new LatLng(53.347239, -6.259098);
-    public static final float CITYWIDE_ZOOM = 14.0f;
+    public static final float CITYWIDE_ZOOM = 13.5f;
     public static final float MY_LOCATION_ZOOM = 15.0f;
 
     private BroadcastReceiver onLocationUpdate = new BroadcastReceiver() {
@@ -95,6 +95,7 @@ public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCa
         for (Vendor vendor : vendors) {
             googleMap.addMarker(new MarkerOptions()
                     .title(vendor.getVendorName())
+                    .snippet(vendor.getAddress())
                     .position(vendor.getCoords()));
         }
     }
