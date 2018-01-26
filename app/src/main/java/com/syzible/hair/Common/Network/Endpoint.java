@@ -13,7 +13,7 @@ import retrofit2.http.Query;
 
 public class Endpoint {
     private static final int API_VERSION = 1;
-    private static final String BASE_ENDPOINT = "http://10.0.2.2:3000";
+    private static final String BASE_ENDPOINT = "https://hair-api-development.herokuapp.com";
     private static final String API_URL = BASE_ENDPOINT + "/api/v" + API_VERSION;
 
     public static final String GET_ALL_VENDORS = "/vendor";

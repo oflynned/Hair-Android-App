@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.squareup.picasso.Callback;
@@ -91,32 +92,26 @@ public class ContentFragment extends Fragment implements ContentView {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View imageViewHolder = convertView;
-            final ViewHolder viewHolder;
+            View view = convertView;
 
-            if (convertView == null) {
-                LayoutInflater inflater = getLayoutInflater();
-                imageViewHolder = inflater.inflate(R.layout.instagram_content_tile, parent, false);
-
-                viewHolder = new ViewHolder();
-                viewHolder.image = imageViewHolder.findViewById(R.id.instagram_content_tile_image);
-                viewHolder.progressBar = imageViewHolder.findViewById(R.id.placeholder_loading_indicator);
-                imageViewHolder.setTag(viewHolder);
+            if (view == null) {
+                view = LayoutInflater.from(getContext()).inflate(R.layout.instagram_content_tile, null);
             } else {
-                viewHolder = (ViewHolder) convertView.getTag();
+                view = convertView;
             }
 
-            InstaContent contentItem = content.get(position);
-            Log.i(getClass().getSimpleName(), contentItem.getThumbnailUrl());
+            ImageView imageView = view.findViewById(R.id.instagram_content_tile_image);
+            final ProgressBar progressBar = view.findViewById(R.id.placeholder_loading_indicator);
 
+            InstaContent contentItem = content.get(position);
             Picasso.with(getContext())
-                    .load(contentItem.getThumbnailUrl())
+                    .load(contentItem.getLowQualityUrl())
+                    .placeholder(R.mipmap.ic_launcher)
                     .fit()
-                    .into(viewHolder.image, new Callback() {
+                    .into(imageView, new Callback() {
                         @Override
                         public void onSuccess() {
-                            Log.i(getClass().getSimpleName(), "Picasso successful");
-                            viewHolder.progressBar.setVisibility(View.GONE);
+                            progressBar.setVisibility(View.GONE);
                         }
 
                         @Override
@@ -125,7 +120,7 @@ public class ContentFragment extends Fragment implements ContentView {
                         }
                     });
 
-            return imageViewHolder;
+            return view;
         }
     }
 }

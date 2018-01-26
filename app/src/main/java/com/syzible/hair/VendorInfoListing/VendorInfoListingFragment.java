@@ -67,7 +67,6 @@ public class VendorInfoListingFragment extends Fragment implements VendorInfoLis
     @Override
     public void onPause() {
         presenter.detach();
-        MainActivity.removeFragment(getFragmentManager(), this);
         super.onPause();
     }
 

@@ -91,29 +91,38 @@ public class MainActivity extends AppCompatActivity {
             fragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, fragment)
                     .commit();
+            fragmentManager.executePendingTransactions();
         }
     }
 
     public static void setFragmentBackstack(FragmentManager fragmentManager, Fragment fragment) {
-        if (fragmentManager != null)
+        if (fragmentManager != null) {
             fragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, fragment)
                     .addToBackStack(fragment.getClass().getName())
                     .commit();
+            fragmentManager.executePendingTransactions();
+        }
     }
 
     public static void removeTopFragment(FragmentManager fragmentManager) {
-        if (fragmentManager != null)
+        if (fragmentManager != null) {
             fragmentManager.popBackStack();
+            fragmentManager.executePendingTransactions();
+        }
     }
 
     public static void removeFragment(FragmentManager fragmentManager, Fragment fragment) {
-        if (fragmentManager != null)
+        if (fragmentManager != null) {
             fragmentManager.beginTransaction().remove(fragment).commit();
+            fragmentManager.executePendingTransactions();
+        }
     }
 
     public static void clearBackstack(FragmentManager fragmentManager) {
-        if (fragmentManager != null)
+        if (fragmentManager != null) {
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fragmentManager.executePendingTransactions();
+        }
     }
 }

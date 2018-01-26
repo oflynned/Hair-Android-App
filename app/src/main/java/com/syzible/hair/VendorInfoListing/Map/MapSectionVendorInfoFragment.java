@@ -43,7 +43,6 @@ public class MapSectionVendorInfoFragment extends Fragment implements MapSection
     @Override
     public void onPause() {
         presenter.detach();
-        MainActivity.removeFragment(getFragmentManager(), this);
         super.onPause();
     }
 
