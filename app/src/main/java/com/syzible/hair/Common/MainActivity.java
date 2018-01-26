@@ -50,16 +50,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private BroadcastReceiver onLocationUpdate = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            assert onLocationUpdate != null;
-            if (Objects.equals(intent.getAction(), Filters.location_update.toString())) {
-
-            }
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,14 +63,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        checkPermission();
-        registerReceiver(onLocationUpdate, new IntentFilter(Filters.location_update.toString()));
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        unregisterReceiver(onLocationUpdate);
         super.onPause();
     }
 
@@ -157,26 +144,6 @@ public class MainActivity extends AppCompatActivity {
         if (fragmentManager != null) {
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             fragmentManager.executePendingTransactions();
-        }
-    }
-
-    public void checkPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                    }, 123);
-        } else {
-            MainActivity.this.startService(new Intent(this, LocationService.class));
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            MainActivity.this.startService(new Intent(this, LocationService.class));
         }
     }
 }
