@@ -30,6 +30,10 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
+    private VendorListFragment vendorListFragment;
+    private VendorMapFragment vendorMapFragment;
+    private InterestedPartiesFragment interestedPartiesFragment;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -37,13 +41,13 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_vendors:
-                    setFragment(getFragmentManager(), new VendorListFragment());
+                    setFragment(getFragmentManager(), vendorListFragment);
                     return true;
                 case R.id.navigation_map:
-                    setFragment(getFragmentManager(), new VendorMapFragment());
+                    setFragment(getFragmentManager(), vendorMapFragment);
                     return true;
                 case R.id.navigation_interested_parties:
-                    setFragment(getFragmentManager(), new InterestedPartiesFragment());
+                    setFragment(getFragmentManager(), interestedPartiesFragment);
                     return true;
             }
             return false;
@@ -71,7 +75,11 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        setFragment(getFragmentManager(), new VendorListFragment());
+        vendorListFragment = new VendorListFragment();
+        vendorMapFragment = new VendorMapFragment();
+        interestedPartiesFragment = new InterestedPartiesFragment();
+
+        setFragment(getFragmentManager(), vendorListFragment);
     }
 
     @Override
