@@ -2,11 +2,14 @@ package com.syzible.hair.VendorList;
 
 import android.Manifest;
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,7 +23,12 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.syzible.hair.Common.Broadcast.Filters;
 import com.syzible.hair.Common.Location.LocationService;
 import com.syzible.hair.Common.MainActivity;
 import com.syzible.hair.Common.Objects.Vendor;
@@ -28,6 +36,7 @@ import com.syzible.hair.R;
 import com.syzible.hair.VendorInfoListing.VendorInfoListingFragment;
 
 import java.util.List;
+import java.util.Objects;
 
 public class VendorListFragment extends Fragment implements VendorListView {
     private VendorListAdapter adapter;
@@ -50,6 +59,7 @@ public class VendorListFragment extends Fragment implements VendorListView {
 
         presenter.attach(this);
         presenter.loadData();
+        checkPermission();
 
         super.onResume();
     }
@@ -63,6 +73,11 @@ public class VendorListFragment extends Fragment implements VendorListView {
     public void setList(List<Vendor> vendors) {
         adapter = new VendorListAdapter(vendors);
         setDecorator();
+    }
+
+    @Override
+    public VendorListAdapter getAdapter() {
+        return adapter;
     }
 
     @Override
@@ -129,7 +144,7 @@ public class VendorListFragment extends Fragment implements VendorListView {
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, int position) {
             final Vendor vendor = vendors.get(position);
 
             holder.title.setText(vendor.getVendorName());
@@ -137,12 +152,17 @@ public class VendorListFragment extends Fragment implements VendorListView {
             holder.tags.setText(vendor.getTags().format());
             holder.priority.setVisibility(vendor.isPriority() ? View.VISIBLE : View.INVISIBLE);
 
-            Picasso.with(holder.itemView.getContext()).load(vendor.getLogoUrl()).into(holder.logo);
-            YoYo.with(Techniques.Wobble).duration(1000).delay(position % 2 == 0 ? 500 : 0).playOn(holder.itemView);
+            Picasso.with(holder.itemView.getContext())
+                    .load(vendor.getLogoUrl())
+                    .into(holder.logo);
+
+            YoYo.with(holder.getAdapterPosition() % 2 == 0 ? Techniques.BounceInLeft : Techniques.BounceInRight)
+                    .duration(1000).playOn(holder.itemView);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    YoYo.with(Techniques.Wobble).duration(750).playOn(holder.itemView);
                     onVendorClick(vendor);
                 }
             });

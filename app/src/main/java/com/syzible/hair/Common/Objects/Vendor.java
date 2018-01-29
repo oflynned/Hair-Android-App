@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 public class Vendor {
     private String vendorName, logoUrl, address, igUsername;
-    private double lat, lng;
+    private double lat, lng, distance;
 
     private Tags tags;
     private OpeningHours openingHours;
@@ -19,6 +19,7 @@ public class Vendor {
         this.vendorName = o.getString("vendor");
         this.openingHours = new OpeningHours(o.getJSONObject("opening_hours"));
         this.priceList = new PriceList(o.getJSONObject("prices"));
+        //this.distance = o.getDouble("distance");
 
         JSONObject meta = o.getJSONObject("meta");
         this.logoUrl = meta.getString("logo");
@@ -41,6 +42,10 @@ public class Vendor {
         this.openingHours = openingHours;
         this.priceList = priceList;
         this.isPriority = isPriority;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 
     public String getVendorName() {
@@ -73,5 +78,9 @@ public class Vendor {
 
     public boolean isPriority() {
         return isPriority;
+    }
+
+    public String getIgUsername() {
+        return igUsername;
     }
 }

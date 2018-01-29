@@ -1,8 +1,15 @@
 package com.syzible.hair.VendorList;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 
+import com.loopj.android.http.BaseJsonHttpResponseHandler;
+import com.syzible.hair.Common.Broadcast.Filters;
 import com.syzible.hair.Common.Network.Endpoint;
+import com.syzible.hair.Common.Network.RestClient;
 import com.syzible.hair.Common.Objects.OpeningTimeNotFoundException;
 import com.syzible.hair.Common.Objects.Vendor;
 
@@ -11,11 +18,32 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import cz.msebera.android.httpclient.Header;
 
 public class VendorListPresenterImpl implements VendorListPresenter {
 
     private VendorListView view;
     private VendorListInteractor interactor;
+    private List<Vendor> vendors;
+    private Snackbar snackbar;
+
+    private BroadcastReceiver onLocationUpdate = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            assert onLocationUpdate != null;
+
+            if (Objects.equals(intent.getAction(), Filters.location_update.toString())) {
+                double lat = Double.parseDouble(intent.getStringExtra("lat"));
+                double lng = Double.parseDouble(intent.getStringExtra("lng"));
+
+                for (Vendor vendor : vendors) {
+
+                }
+            }
+        }
+    };
 
     @Override
     public void attach(VendorListView vendorListView) {
@@ -31,24 +59,32 @@ public class VendorListPresenterImpl implements VendorListPresenter {
 
     @Override
     public void loadData() {
-        interactor.fetch(Endpoint.GET_ALL_VENDORS, new VendorListInteractor.OnFetchFinished() {
-            @Override
-            public void onError(int statusCode, String message) {
-                Log.e(getClass().getSimpleName(), statusCode + ": " + message);
-            }
+        if (view != null) {
+            snackbar = Snackbar.make(view.getView(), "Waiting for Heroku to spin up...", Snackbar.LENGTH_INDEFINITE);
+            snackbar.show();
 
-            @Override
-            public void onSuccess(JSONArray a) throws JSONException, OpeningTimeNotFoundException {
-                if (view != null) {
-                    List<Vendor> vendors = new ArrayList<>();
-                    for (int i = 0; i < a.length(); i++) {
-                        vendors.add(new Vendor(a.getJSONObject(i)));
-                    }
-
-                    if (view.getContext() != null)
-                        view.setList(vendors);
+            interactor.fetch(Endpoint.GET_ALL_VENDORS, new VendorListInteractor.OnFetchFinished() {
+                @Override
+                public void onError(int statusCode, String message) {
+                    snackbar.dismiss();
+                    snackbar = Snackbar.make(view.getView(), message + "(" + statusCode + ")", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    Log.e(getClass().getSimpleName(), statusCode + ": " + message);
                 }
-            }
-        });
+
+                @Override
+                public void onSuccess(JSONArray a) throws JSONException, OpeningTimeNotFoundException {
+                    if (view != null) {
+                        snackbar.dismiss();
+                        vendors = new ArrayList<>();
+                        for (int i = 0; i < a.length(); i++)
+                            vendors.add(new Vendor(a.getJSONObject(i)));
+
+                        if (view.getContext() != null)
+                            view.setList(vendors);
+                    }
+                }
+            });
+        }
     }
 }

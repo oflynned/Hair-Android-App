@@ -19,6 +19,8 @@ import com.syzible.hair.R;
 
 import java.util.List;
 
+import jp.wasabeef.picasso.transformations.CropSquareTransformation;
+
 public class ContentFragment extends Fragment implements ContentView {
     private View view;
     private ContentPresenter contentPresenter;
@@ -101,8 +103,7 @@ public class ContentFragment extends Fragment implements ContentView {
             InstaContent contentItem = content.get(position);
             Picasso.with(getContext())
                     .load(contentItem.getLowQualityUrl())
-                    .placeholder(R.mipmap.ic_launcher)
-                    .fit()
+                    .transform(new CropSquareTransformation())
                     .into(imageView, new Callback() {
                         @Override
                         public void onSuccess() {
