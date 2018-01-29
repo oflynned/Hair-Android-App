@@ -53,7 +53,7 @@ public class ContentFragment extends Fragment implements ContentView {
     @Override
     public void setAdapter(List<InstaContent> content) {
         GridView gridView = view.findViewById(R.id.instagram_content_grid);
-        gridView.setAdapter(new ContentAdapter(content));
+        gridView.setAdapter(new ContentAdapter(getContext(), content));
     }
 
     @Override
@@ -65,59 +65,5 @@ public class ContentFragment extends Fragment implements ContentView {
         this.vendor = vendor;
     }
 
-    class ContentAdapter extends BaseAdapter {
-        private List<InstaContent> content;
 
-        ContentAdapter(List<InstaContent> content) {
-            this.content = content;
-        }
-
-        @Override
-        public int getCount() {
-            return content.size();
-        }
-
-        @Override
-        public InstaContent getItem(int position) {
-            return content.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return content.get(position).getCreationTime();
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view = convertView;
-
-            if (view == null) {
-                view = LayoutInflater.from(getContext())
-                        .inflate(R.layout.instagram_content_tile, null);
-            } else {
-                view = convertView;
-            }
-
-            ImageView imageView = view.findViewById(R.id.instagram_content_tile_image);
-            final ProgressBar progressBar = view.findViewById(R.id.placeholder_loading_indicator);
-
-            InstaContent contentItem = content.get(position);
-            Picasso.with(getContext())
-                    .load(contentItem.getLowQualityUrl())
-                    .transform(new CropSquareTransformation())
-                    .into(imageView, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            progressBar.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onError() {
-                            Log.e(getClass().getSimpleName(), "Picasso failed");
-                        }
-                    });
-
-            return view;
-        }
-    }
 }
