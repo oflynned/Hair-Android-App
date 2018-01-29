@@ -92,7 +92,8 @@ public class ContentFragment extends Fragment implements ContentView {
             View view = convertView;
 
             if (view == null) {
-                view = LayoutInflater.from(getContext()).inflate(R.layout.instagram_content_tile, null);
+                view = LayoutInflater.from(getContext())
+                        .inflate(R.layout.instagram_content_tile, null);
             } else {
                 view = convertView;
             }
