@@ -16,11 +16,11 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.syzible.hair.Common.Broadcast.Filters;
 import com.syzible.hair.Common.Location.LocationService;
+import com.syzible.hair.Common.Persistence.Prefs;
 import com.syzible.hair.InterestedParties.InterestedPartiesFragment;
 import com.syzible.hair.R;
 import com.syzible.hair.VendorList.VendorListFragment;
@@ -50,6 +50,19 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private BroadcastReceiver onLocationChange = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Objects.equals(intent.getAction(), Filters.location_update.toString())) {
+                double lat = Double.parseDouble(intent.getStringExtra("lat"));
+                double lng = Double.parseDouble(intent.getStringExtra("lng"));
+
+                Prefs.setDoublePref(getApplicationContext(), Prefs.Pref.last_lat, lat);
+                Prefs.setDoublePref(getApplicationContext(), Prefs.Pref.last_lng, lng);
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +76,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        checkPermission();
+        registerReceiver(onLocationChange,
+                new IntentFilter(Filters.location_update.toString()));
         super.onResume();
     }
 
     @Override
     protected void onPause() {
+        unregisterReceiver(onLocationChange);
         super.onPause();
     }
 
@@ -128,6 +145,26 @@ public class MainActivity extends AppCompatActivity {
         if (fragmentManager != null) {
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             fragmentManager.executePendingTransactions();
+        }
+    }
+
+    public void checkPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                    }, 123);
+        } else {
+            this.startService(new Intent(this, LocationService.class));
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            this.startService(new Intent(this, LocationService.class));
         }
     }
 }

@@ -19,6 +19,7 @@ public class Endpoint {
     private static final String API_URL = BASE_ENDPOINT + "/api/v" + API_VERSION;
 
     public static final String GET_ALL_VENDORS = "/vendor";
+    public static final String GET_VENDOR_DISTANCE = "/vendor/distance";
     public static final String GET_CONTENT_STREAM = "/content";
 
     public static boolean isDebugMode() {

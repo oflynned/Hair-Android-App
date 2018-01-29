@@ -12,12 +12,13 @@ public class PriceList {
 
     public PriceList(JSONObject o) throws JSONException {
         prices = new ArrayList<>();
-        Iterator<?> keys = o.keys();
+        Iterator<String> keys = o.keys();
 
         while (keys.hasNext()) {
-            String style = (String) keys.next();
-            double cost = o.getDouble(style);
-            prices.add(new Price(style, cost));
+            String style = keys.next();
+            String description = o.getJSONObject(style).getString("description");
+            double cost = o.getJSONObject(style).getDouble("cost");
+            prices.add(new Price(style, description, cost));
         }
     }
 

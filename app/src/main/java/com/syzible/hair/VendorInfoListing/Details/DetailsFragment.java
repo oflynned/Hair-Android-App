@@ -23,16 +23,13 @@ import com.syzible.hair.VendorList.DividerDecorator;
 import java.util.List;
 
 public class DetailsFragment extends Fragment implements DetailsView {
-
     private Vendor vendor;
     private DetailsPresenter presenter;
 
     private TextView monHours, tuesHours, wedHours, thursHours, friHours, satHours, sunHours;
     private TextView openStatus;
-    private TextView prices;
 
     private RecyclerView recyclerView;
-    private PriceListAdapter adapter;
 
     @Nullable
     @Override
@@ -94,7 +91,7 @@ public class DetailsFragment extends Fragment implements DetailsView {
 
     @Override
     public void setPrices(PriceList prices) {
-        adapter = new PriceListAdapter(prices.getPrices());
+        PriceListAdapter adapter = new PriceListAdapter(prices.getPrices());
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -110,45 +107,5 @@ public class DetailsFragment extends Fragment implements DetailsView {
 
     public void setVendor(Vendor vendor) {
         this.vendor = vendor;
-    }
-
-    class PriceListAdapter extends RecyclerView.Adapter<DetailsFragment.PriceListAdapter.ViewHolder> {
-        private List<Price> prices;
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-            TextView haircut, description, price;
-
-            ViewHolder(View v) {
-                super(v);
-
-                haircut = v.findViewById(R.id.haircut_name);
-                description = v.findViewById(R.id.haircut_description);
-                price = v.findViewById(R.id.haircut_price);
-            }
-        }
-
-        PriceListAdapter(List<Price> prices) {
-            this.prices = prices;
-        }
-
-        @Override
-        public DetailsFragment.PriceListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.pricing_card, parent, false);
-            return new DetailsFragment.PriceListAdapter.ViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(DetailsFragment.PriceListAdapter.ViewHolder holder, int position) {
-            Price price = prices.get(position);
-
-            holder.haircut.setText(price.getStyle());
-            // holder.description.setText(price.getDescription());
-            holder.price.setText(price.getFormattedCost());
-        }
-
-        @Override
-        public int getItemCount() {
-            return prices.size();
-        }
     }
 }

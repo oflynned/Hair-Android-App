@@ -19,7 +19,6 @@ public class Vendor {
         this.vendorName = o.getString("vendor");
         this.openingHours = new OpeningHours(o.getJSONObject("opening_hours"));
         this.priceList = new PriceList(o.getJSONObject("prices"));
-        //this.distance = o.getDouble("distance");
 
         JSONObject meta = o.getJSONObject("meta");
         this.logoUrl = meta.getString("logo");
@@ -46,6 +45,10 @@ public class Vendor {
 
     public void setDistance(double distance) {
         this.distance = distance;
+    }
+
+    public double getDistance() {
+        return distance;
     }
 
     public String getVendorName() {

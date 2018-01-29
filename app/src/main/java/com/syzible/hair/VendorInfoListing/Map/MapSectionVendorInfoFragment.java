@@ -11,15 +11,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.syzible.hair.Common.Objects.Vendor;
 import com.syzible.hair.R;
 
-public class MapSectionVendorInfoFragment extends Fragment implements MapSectionVendorInfoView, OnMapReadyCallback {
+public class MapSectionVendorInfoFragment extends Fragment implements MapSectionVendorInfoView, OnMapReadyCallback{
     private MapSectionVendorInfoPresenter presenter;
     private Vendor vendor;
 
-    public static final float VENDOR_IN_FOCUS_ZOOM = 15.0f;
+    private static final float CITYWIDE_ZOOM = 13.5f;
+    private static final float VENDOR_IN_FOCUS_ZOOM = 15.0f;
 
     @Nullable
     @Override
@@ -36,7 +38,6 @@ public class MapSectionVendorInfoFragment extends Fragment implements MapSection
             presenter = new MapSectionVendorInfoPresenterImpl();
 
         presenter.attach(this);
-
         super.onResume();
     }
 
@@ -53,8 +54,12 @@ public class MapSectionVendorInfoFragment extends Fragment implements MapSection
                 new MarkerOptions()
                         .position(vendor.getCoords())
                         .title(vendor.getVendorName()));
+
         googleMap.moveCamera(
-                CameraUpdateFactory.newLatLngZoom(vendor.getCoords(), VENDOR_IN_FOCUS_ZOOM));
+                CameraUpdateFactory.newLatLngZoom(vendor.getCoords(), CITYWIDE_ZOOM));
+        googleMap.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(vendor.getCoords(), VENDOR_IN_FOCUS_ZOOM)
+        );
     }
 
     @Override

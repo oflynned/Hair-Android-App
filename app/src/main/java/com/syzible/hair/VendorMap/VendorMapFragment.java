@@ -1,6 +1,7 @@
 package com.syzible.hair.VendorMap;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.syzible.hair.Common.Location.LocationService;
 import com.syzible.hair.Common.MainActivity;
@@ -28,10 +30,11 @@ import com.syzible.hair.VendorInfoListing.VendorInfoListingFragment;
 
 import java.util.List;
 
-public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCallback {
+public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap googleMap;
     private MapPresenter mapPresenter;
+    private List<Vendor> vendors;
 
     private static final LatLng DUBLIN = new LatLng(53.347239, -6.259098);
     private static final float CITYWIDE_ZOOM = 13.5f;
@@ -64,7 +67,9 @@ public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCa
 
     @Override
     public void drawPins(List<Vendor> vendors) {
+        this.vendors = vendors;
         googleMap.clear();
+
         for (Vendor vendor : vendors) {
             googleMap.addMarker(new MarkerOptions()
                     .title(vendor.getVendorName())
@@ -86,31 +91,24 @@ public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCa
         googleMap.animateCamera(projection);
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        checkPermission();
         googleMap.setMyLocationEnabled(true);
+        googleMap.setOnInfoWindowClickListener(this);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DUBLIN, CITYWIDE_ZOOM));
         this.googleMap = googleMap;
     }
 
-    public void checkPermission() {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                    }, 123);
-        } else {
-            getActivity().startService(new Intent(getActivity(), LocationService.class));
-        }
-    }
-
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            getActivity().startService(new Intent(getActivity(), LocationService.class));
+    public void onInfoWindowClick(Marker marker) {
+        for (Vendor vendor : vendors) {
+            if (vendor.getVendorName().equals(marker.getTitle())) {
+                VendorInfoListingFragment fragment = new VendorInfoListingFragment();
+                fragment.setVendor(vendor);
+
+                MainActivity.setFragmentBackstack(getFragmentManager(), fragment);
+            }
         }
     }
 }

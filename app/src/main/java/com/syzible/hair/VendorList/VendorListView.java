@@ -8,7 +8,9 @@ import java.util.List;
 public interface VendorListView extends Mvp.IView {
     void setList(List<Vendor> vendors);
 
-    VendorListFragment.VendorListAdapter getAdapter();
+    VendorListAdapter getAdapter();
 
-    void onVendorClick(Vendor vendor);
+    interface onVendorClick {
+        void onClick(Vendor vendor);
+    }
 }

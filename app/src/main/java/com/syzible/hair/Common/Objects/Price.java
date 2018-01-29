@@ -17,6 +17,10 @@ public class Price {
         return style;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public String getFormattedCost() {
         NumberFormat irishFormat = NumberFormat.getInstance(Locale.UK);
         return "€" + irishFormat.format(cost);

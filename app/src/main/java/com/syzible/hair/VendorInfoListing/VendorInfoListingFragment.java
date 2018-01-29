@@ -24,22 +24,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VendorInfoListingFragment extends Fragment implements VendorInfoListingView {
-
     private Vendor vendor;
     private VendorInfoListingPresenter presenter;
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
+    private TextView vendorTitle, vendorTags, vendorAddress;
+    private ImageView vendorLogo;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vendor_listing, container, false);
 
-        TextView vendorTitle = view.findViewById(R.id.vendor_name);
-        TextView vendorTags = view.findViewById(R.id.vendor_tags);
-        TextView vendorAddress = view.findViewById(R.id.vendor_address);
-        ImageView vendorLogo = view.findViewById(R.id.vendor_logo);
+        vendorTitle = view.findViewById(R.id.vendor_name);
+        vendorTags = view.findViewById(R.id.vendor_tags);
+        vendorAddress = view.findViewById(R.id.vendor_address);
+        vendorLogo = view.findViewById(R.id.vendor_logo);
 
         viewPager = view.findViewById(R.id.vendor_info_holder);
         tabLayout = view.findViewById(R.id.vendor_info_tabs);
@@ -58,6 +59,7 @@ public class VendorInfoListingFragment extends Fragment implements VendorInfoLis
             presenter = new VendorInfoListingPresenterImpl();
 
         presenter.attach(this);
+        presenter.pollVendorDistance();
 
         if (viewPager != null)
             setupViewPager(viewPager);
@@ -97,8 +99,15 @@ public class VendorInfoListingFragment extends Fragment implements VendorInfoLis
         this.vendor = vendor;
     }
 
+    @Override
     public Vendor getVendor() {
         return vendor;
+    }
+
+    @Override
+    public void setVendorDistance(double distance, String units) {
+        String content = distance + units + " away";
+        vendorAddress.setText(content);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

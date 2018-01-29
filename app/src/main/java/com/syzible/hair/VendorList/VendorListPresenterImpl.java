@@ -29,16 +29,18 @@ public class VendorListPresenterImpl implements VendorListPresenter {
     private List<Vendor> vendors;
     private Snackbar snackbar;
 
+    private double lat, lng;
+
     private BroadcastReceiver onLocationUpdate = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             assert onLocationUpdate != null;
 
             if (Objects.equals(intent.getAction(), Filters.location_update.toString())) {
-                double lat = Double.parseDouble(intent.getStringExtra("lat"));
-                double lng = Double.parseDouble(intent.getStringExtra("lng"));
+                lat = Double.parseDouble(intent.getStringExtra("lat"));
+                lng = Double.parseDouble(intent.getStringExtra("lng"));
 
-                // TODO update vendors on a new location observed
+                loadData();
             }
         }
     };
