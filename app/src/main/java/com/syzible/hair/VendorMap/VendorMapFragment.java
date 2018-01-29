@@ -2,10 +2,7 @@ package com.syzible.hair.VendorMap;
 
 import android.Manifest;
 import android.app.Fragment;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,7 +20,6 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.syzible.hair.Common.Broadcast.Filters;
 import com.syzible.hair.Common.Location.LocationService;
 import com.syzible.hair.Common.MainActivity;
 import com.syzible.hair.Common.Objects.Vendor;
@@ -31,34 +27,15 @@ import com.syzible.hair.R;
 import com.syzible.hair.VendorInfoListing.VendorInfoListingFragment;
 
 import java.util.List;
-import java.util.Objects;
 
 public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCallback {
 
     private GoogleMap googleMap;
     private MapPresenter mapPresenter;
 
-    public static final LatLng DUBLIN = new LatLng(53.347239, -6.259098);
-    public static final float CITYWIDE_ZOOM = 13.5f;
-    public static final float MY_LOCATION_ZOOM = 15.0f;
-
-    private BroadcastReceiver onLocationUpdate = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            assert onLocationUpdate != null;
-            assert googleMap != null;
-
-            if (Objects.equals(intent.getAction(), Filters.location_update.toString())) {
-                double lat = Double.parseDouble(intent.getStringExtra("lat"));
-                double lng = Double.parseDouble(intent.getStringExtra("lng"));
-                float zoom = googleMap.getCameraPosition().zoom;
-
-                LatLng location = new LatLng(lat, lng);
-                CameraUpdate projection = CameraUpdateFactory.newLatLngZoom(location, zoom);
-                googleMap.animateCamera(projection);
-            }
-        }
-    };
+    private static final LatLng DUBLIN = new LatLng(53.347239, -6.259098);
+    private static final float CITYWIDE_ZOOM = 13.5f;
+    private static final float MY_LOCATION_ZOOM = 15.0f;
 
     @Nullable
     @Override
@@ -71,9 +48,6 @@ public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCa
 
     @Override
     public void onResume() {
-        getActivity().registerReceiver(onLocationUpdate,
-                new IntentFilter(Filters.location_update.toString()));
-
         if (mapPresenter == null)
             mapPresenter = new MapPresenterImpl();
 
@@ -84,7 +58,6 @@ public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCa
 
     @Override
     public void onPause() {
-        getActivity().unregisterReceiver(onLocationUpdate);
         mapPresenter.detach();
         super.onPause();
     }
@@ -108,8 +81,9 @@ public class VendorMapFragment extends Fragment implements MapView, OnMapReadyCa
     }
 
     @Override
-    public void setVendorUnselected() {
-
+    public void updateCameraProjection(LatLng location) {
+        CameraUpdate projection = CameraUpdateFactory.newLatLngZoom(location, MY_LOCATION_ZOOM);
+        googleMap.animateCamera(projection);
     }
 
     @Override

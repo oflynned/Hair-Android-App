@@ -38,6 +38,8 @@ public class VendorListPresenterImpl implements VendorListPresenter {
                 double lat = Double.parseDouble(intent.getStringExtra("lat"));
                 double lng = Double.parseDouble(intent.getStringExtra("lng"));
 
+
+
                 for (Vendor vendor : vendors) {
 
                 }
@@ -60,7 +62,7 @@ public class VendorListPresenterImpl implements VendorListPresenter {
     @Override
     public void loadData() {
         if (view != null) {
-            snackbar = Snackbar.make(view.getView(), "Waiting for Heroku to spin up...", Snackbar.LENGTH_INDEFINITE);
+            snackbar = Snackbar.make(view.getView(), "Waiting for Heroku instance to spin up...", Snackbar.LENGTH_INDEFINITE);
             snackbar.show();
 
             interactor.fetch(Endpoint.GET_ALL_VENDORS, new VendorListInteractor.OnFetchFinished() {
