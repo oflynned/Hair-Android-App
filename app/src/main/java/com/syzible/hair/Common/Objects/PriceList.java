@@ -21,14 +21,6 @@ public class PriceList {
         }
     }
 
-    public PriceList() {
-        prices = new ArrayList<>();
-
-        prices.add(new Price("Dry Cut", 9));
-        prices.add(new Price("Wet Cut", 15));
-        prices.add(new Price("Student", 7));
-    }
-
     public List<Price> getPrices() {
         return prices;
     }

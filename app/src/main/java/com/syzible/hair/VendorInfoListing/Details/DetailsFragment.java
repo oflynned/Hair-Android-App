@@ -4,6 +4,9 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,9 @@ import com.syzible.hair.Common.Objects.Price;
 import com.syzible.hair.Common.Objects.PriceList;
 import com.syzible.hair.Common.Objects.Vendor;
 import com.syzible.hair.R;
+import com.syzible.hair.VendorList.DividerDecorator;
+
+import java.util.List;
 
 public class DetailsFragment extends Fragment implements DetailsView {
 
@@ -24,6 +30,9 @@ public class DetailsFragment extends Fragment implements DetailsView {
     private TextView monHours, tuesHours, wedHours, thursHours, friHours, satHours, sunHours;
     private TextView openStatus;
     private TextView prices;
+
+    private RecyclerView recyclerView;
+    private PriceListAdapter adapter;
 
     @Nullable
     @Override
@@ -40,7 +49,7 @@ public class DetailsFragment extends Fragment implements DetailsView {
 
         openStatus = view.findViewById(R.id.open_now_status);
 
-        prices = view.findViewById(R.id.haircut_pricing);
+        recyclerView = view.findViewById(R.id.haircut_pricing_recycler_view);
 
         return view;
     }
@@ -85,14 +94,13 @@ public class DetailsFragment extends Fragment implements DetailsView {
 
     @Override
     public void setPrices(PriceList prices) {
-        StringBuilder builder = new StringBuilder();
-        for (Price price : prices.getPrices()) {
-            builder.append(price.getStyle())
-                    .append(":\t\t")
-                    .append(price.getFormattedCost())
-                    .append("\n");
-        }
-        this.prices.setText(builder.toString());
+        adapter = new PriceListAdapter(prices.getPrices());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerDecorator(getContext(), 0));
+        recyclerView.setNestedScrollingEnabled(true);
     }
 
     @Override
@@ -102,5 +110,45 @@ public class DetailsFragment extends Fragment implements DetailsView {
 
     public void setVendor(Vendor vendor) {
         this.vendor = vendor;
+    }
+
+    class PriceListAdapter extends RecyclerView.Adapter<DetailsFragment.PriceListAdapter.ViewHolder> {
+        private List<Price> prices;
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            TextView haircut, description, price;
+
+            ViewHolder(View v) {
+                super(v);
+
+                haircut = v.findViewById(R.id.haircut_name);
+                description = v.findViewById(R.id.haircut_description);
+                price = v.findViewById(R.id.haircut_price);
+            }
+        }
+
+        PriceListAdapter(List<Price> prices) {
+            this.prices = prices;
+        }
+
+        @Override
+        public DetailsFragment.PriceListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.pricing_card, parent, false);
+            return new DetailsFragment.PriceListAdapter.ViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(DetailsFragment.PriceListAdapter.ViewHolder holder, int position) {
+            Price price = prices.get(position);
+
+            holder.haircut.setText(price.getStyle());
+            // holder.description.setText(price.getDescription());
+            holder.price.setText(price.getFormattedCost());
+        }
+
+        @Override
+        public int getItemCount() {
+            return prices.size();
+        }
     }
 }

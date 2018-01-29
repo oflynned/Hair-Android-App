@@ -43,39 +43,4 @@ public class VendorListInteractorImpl implements VendorListInteractor {
             }
         });
     }
-
-    @Override
-    public List<Vendor> fetchMockData() throws JSONException, OpeningTimeNotFoundException {
-        List<Vendor> vendors = new ArrayList<>();
-
-        vendors.add(new Vendor("GlassByte Barbers",
-                "http://www.glassbyte.com/images/logo.png",
-                "Leeson St. Upper, Dublin 4",
-                53.329203, -6.249220,
-                new Tags("Crew Cut"),
-                new OpeningHours(),
-                new PriceList(),
-                true));
-
-        vendors.add(new Vendor("Grafton Barber",
-                "https://image.flaticon.com/icons/png/512/40/40861.png",
-                "Grafton St., Dublin 2",
-                53.340165, -6.260666,
-                new Tags("Luxury", "Trendy"),
-                new OpeningHours(),
-                new PriceList(),
-                false));
-
-        vendors.add(new Vendor("Fades and Blades",
-                "https://upload.wikimedia.org/wikipedia/en/b/b2/Running_with_Scissors_logo.png",
-                "Dorset St., Dublin 1",
-                53.359760, -6.261482,
-                new Tags("Quick", "Stylish"),
-                new OpeningHours(),
-                new PriceList(),
-                false));
-
-
-        return vendors;
-    }
 }

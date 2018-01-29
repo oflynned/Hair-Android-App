@@ -38,11 +38,7 @@ public class VendorListPresenterImpl implements VendorListPresenter {
                 double lat = Double.parseDouble(intent.getStringExtra("lat"));
                 double lng = Double.parseDouble(intent.getStringExtra("lng"));
 
-
-
-                for (Vendor vendor : vendors) {
-
-                }
+                // TODO update vendors on a new location observed
             }
         }
     };

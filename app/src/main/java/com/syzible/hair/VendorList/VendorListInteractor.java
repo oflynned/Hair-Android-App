@@ -12,8 +12,6 @@ public interface VendorListInteractor {
 
     void fetch(String endpoint, OnFetchFinished onFetchFinished);
 
-    List<Vendor> fetchMockData() throws JSONException, OpeningTimeNotFoundException;
-
     interface OnFetchFinished {
         void onError(int statusCode, String message);
 
